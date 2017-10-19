@@ -10,9 +10,7 @@ const messages = [];
 server.listen(process.env.PORT || 3000);
 console.log('The server is up and running');
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
+app.use(express.static('./dist'));
 
 io.sockets.on('connection', (socket) => {
   connections.push(socket);
