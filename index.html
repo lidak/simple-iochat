@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="socket.io/socket.io.js"></script>
+  <style>
+    body {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="well">
+          <h3>Online users</h3>
+          <ul class="list-group" id="users"></ul>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="chat" id="chat"></div>
+        <form action="" id="messageForm">
+          <label for="">Enter message</label>
+          <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>
+          <br />
+          <input type="submit">
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    const socket = io.connect();
+    const messageForm = document.getElementById('messageForm');
+    const message = document.getElementById('message');
+    const chat = document.getElementById('chat');
+
+    messageForm.onsubmit = (event) => {
+      event.preventDefault();
+      socket.emit('send message', message.value);
+      message.value = '';
+    }
+
+    socket.on('new message', (data) => {
+      const messageContainer = document.createElement('div');
+
+      messageContainer.classList.add('well');
+      messageContainer.innerText = data.message;
+
+      chat.appendChild(messageContainer);
+    })
+  </script>
+</body>
+</html>
